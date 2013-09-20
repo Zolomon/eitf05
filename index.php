@@ -1,6 +1,6 @@
 <?php
 
-include 'config.php'
+include 'config.php';
 
 if (!$link) {
     die('Could not connect: ' . mysql_error());
