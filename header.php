@@ -91,6 +91,7 @@
 						<li class="active"><a href="shop.php">1. Shop</a></li>
 						<li><a href="cart.php">2. Cart</a></li>
 						<li><a href="checkout.php">3. Checkout</a></li>
+						<li><a href="signup.php" style="padding: 10px 0 0 0 ;"><button type="submit" class="btn-sm btn-primary">Sign Up</button></a><li>
 					</ul>
 
 					<form class="navbar-form navbar-right">
@@ -104,8 +105,9 @@
 
 						<button type="submit" class="btn btn-success">Sign in</button>
 					</form>
+
 					<ul class="nav navbar-nav">
-						<a href="signup.php"><button type="submit" class="btn btn-success">Sign in</button></a>
+						
 					</ul>
 					
 				</div><!--/.navbar-collapse -->
