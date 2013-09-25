@@ -94,7 +94,7 @@
 						<li><a href="signup.php" style="padding: 10px 0 0 0 ;"><button type="submit" class="btn-sm btn-primary">Sign Up</button></a><li>
 					</ul>
 
-					<form class="navbar-form navbar-right">
+					<form class="navbar-form navbar-right" action="login.php" method="post">
 						<div class="form-group">
 							<input type="text" placeholder="Email" class="form-control">
 						</div>
