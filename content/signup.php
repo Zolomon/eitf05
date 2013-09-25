@@ -8,12 +8,13 @@ $values = [
 'surname'			=> NULL,
 'homeaddress'		=> NULL,
 'zipcode'			=> NULL,
-'city'				=> NULL
+'city'				=> NULL,
+'country'			=> NULL
 ];
 
 $isInputValid = FALSE;
 
-function RenderControl($val, $name, $type, $cols, $label, $helptext, $success)
+function RenderControl($val, $name, $type, $cols, $label, $helptext)
 {
 	$val = htmlspecialchars($val);
 
