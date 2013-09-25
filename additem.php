@@ -1,19 +1,16 @@
 <?php
 	include 'config.php';
-	function add_item($name, $description, $price, $db) {
+	function add_item(&$db, $name, $description, $price) {
 		if ($stmt = $db->prepare("INSERT into items (name, description, price) VALUES (:name, :description, CAST(:price AS DECIMAL))")) {
 			$stmt->bindParam(':name', $name, PDO::PARAM_STR);
 			$stmt->bindParam(':description', $description, PDO::PARAM_STR);
 			$stmt->bindValue(':price', strval($price), PDO::PARAM_STR);
 
-			var_dump($price);
-    	 	/* execute query */
-    		$stmt->execute();
+			$stmt->execute();
 		} else {
 			echo "Failed to add item!";
 		}
 	}
-	// TODO: move this into a function.
 
 	include 'session.php';
 
@@ -22,7 +19,7 @@
 	$description = $_POST["item_desc"];
 	$price = $_POST["item_price"];
 
-	add_item($name, $description, $price, $db);
+	add_item($db, $name, $description, $price);
 
 	session_write_close();
 
