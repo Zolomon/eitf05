@@ -2,25 +2,44 @@
 
 function display_items($stmt) 
 {
-	$i = 0;
-	while (mysqli_stmt_fetch($stmt)) {
-		if (i%3 == 0) {
-			echo "<div class='row'>";
+	echo <<<EOT
+	<div class='container'>
+	<div class='row'>
+		<table class='table table-striped' width='400'>";
+			<thead>
+          		<tr>
+            		<th>Item</th>
+            		<th>Description</th>
+            		<th>Price</th>
+          		</tr>
+        		</thead>
+EOT;
+	while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+		$name = $result['name'];
+		if(strlen($name) > 20){
+			$name = substr($name, 0, 18) . "...";			
 		}
-		echo "<div class='col-md-4'>$name \$$price:<br><br>$description</div>";
-			
-		if (i%3 == 2) {
-			echo "</div>";
+		$description = $result['description'];
+		if(strlen($description) > 100){
+			$description = substr($description, 0, 98) . "...";
 		}
-		$i = $i + 1;
+		echo <<<EOT
+			<tr>
+  				<td>$name</td>
+  				<td>$description</td>
+  				<td>\${$result['price']}</td>
+			</tr>
+EOT;
+		//printf("<div class='col-md-4'>%s \$%s:<br><br>%s</div>", $result['name'], $result['price'], $result['description']);
 	}
+	echo "</table></div></div>";
 }
 
 function add_item($name, $description, $price) {
 	if ($stmt = $db->prepare("INSERT into items (name, description, price) VALUES (:name, :description, :price)")) {
 		$stmt->bindParam(':name', $name, PDO::PARAM_STR);
 		$stmt->bindParam(':description', $description, PDO::PARAM_STR);
-		$stmt->bindParam(':price', $price, PDO::PARAM_INT);
+		$stmt->bindParam(':price', $price, PDO::PARAM_STR);
 	
     	 /* execute query */
     	$stmt->execute();
@@ -49,10 +68,8 @@ if ($stmt = $db->prepare("SELECT name, description, price FROM items LIMIT :shop
 
      /* execute query */
     $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-
-    printf("%s %s %s\n", $result[0], $result[1], $result[2]);
+    display_items($stmt);
 
 	//echo "true";
 } else {

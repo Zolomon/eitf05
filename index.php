@@ -10,6 +10,4 @@ include 'content.php';
 
 include 'footer.php';
 
-mysqli_close($link);
-
 ?>
