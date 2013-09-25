@@ -12,60 +12,9 @@
 
 		<!-- Bootstrap core CSS -->
 		<link href="dist/css/bootstrap.css" rel="stylesheet">
+		<link href="assets/css/custom.css" rel="stylesheet">
 
-		<!-- Custom styles for this template -->
-		<!-- <link href="jumbotron.css" rel="stylesheet"> -->
-
-		<style type="text/css">
-			/*
-			 * Style twaks
-			 * --------------------------------------------------
-			 */
-			body {
-				padding-top: 70px;
-			}
-			footer {
-				padding-left: 15px;
-				padding-right: 15px;
-			}
-
-			/*
-			 * Off Canvas
-			 * --------------------------------------------------
-			 */
-			@media screen and (max-width: 768px) {
-				.row-offcanvas {
-					position: relative;
-					-webkit-transition: all 0.25s ease-out;
-					-moz-transition: all 0.25s ease-out;
-					transition: all 0.25s ease-out;
-				}
-
-				.row-offcanvas-right
-				.sidebar-offcanvas {
-					right: -50%; /* 6 columns */
-				}
-
-				.row-offcanvas-left
-				.sidebar-offcanvas {
-					left: -50%; /* 6 columns */
-				}
-
-				.row-offcanvas-right.active {
-					right: 50%; /* 6 columns */
-				}
-
-				.row-offcanvas-left.active {
-					left: 50%; /* 6 columns */
-				}
-
-				.sidebar-offcanvas {
-					position: absolute;
-					top: 0;
-					width: 50%; /* 6 columns */
-				}
-			}
-		</style>
+		
 
 		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>
@@ -89,22 +38,36 @@
 				<div class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
 						<li class="active"><a href="shop.php">1. Shop</a></li>
-						<li><a href="cart.php">2. Cart</a></li>
-						<li><a href="checkout.php">3. Checkout</a></li>
+						<?php 
+							if (isset($_SESSION['loggedin']) && $_SESSION['loggedin']) { 
+								echo '<li><a href="cart.php">2. Cart</a></li>';
+								echo '<li><a href="checkout.php">3. Checkout</a></li>';
+							}
+						?>
 						<li><a href="signup.php" style="padding: 10px 0 0 0 ;"><button type="submit" class="btn-sm btn-primary">Sign Up</button></a><li>
 					</ul>
 
 					<form class="navbar-form navbar-right" action="login.php" method="post">
 						<div class="form-group">
-							<input type="text" placeholder="Email" class="form-control">
+							<input type="text" name="email" placeholder="Email" class="form-control">
 						</div>
 
 						<div class="form-group">
-							<input type="password" placeholder="Password" class="form-control">
+							<input type="password" name="password" placeholder="Password" class="form-control">
 						</div>
 
 						<button type="submit" class="btn btn-success">Sign in</button>
 					</form>
+
+					<?php 
+							if (isset($_SESSION['loggedin']) && $_SESSION['loggedin']) { 
+								echo <<<EOT
+					<form class="navbar-form navbar-right" action="logout.php" method="post">
+						<button type="submit" class="btn btn-error">Logout</button>
+					</form>
+EOT;
+							}
+						?>
 
 					<ul class="nav navbar-nav">
 						

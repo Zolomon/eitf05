@@ -15,6 +15,11 @@ The following files sets `$_SESSION['site']` to the name of the file, and then r
 * `cart.php`
 * `checkout.php`
 
+Protection
+====
+[XSS Evasion Cheat Sheet](https://www.owasp.org/index.php/XSS_Filter_Evasion_Cheat_Sheet)
+
 TODO
 ====
 
+[ ] SQLi protection via sanitizing input EVERYWHERE

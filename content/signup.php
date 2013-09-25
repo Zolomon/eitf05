@@ -14,8 +14,7 @@ $values = [
 
 $isInputValid = FALSE;
 
-function RenderControl($val, $name, $type, $cols, $label, $helptext)
-{
+function render_ctrl($val, $name, $type, $cols, $label, $helptext) {
 	$val = htmlspecialchars($val);
 
 	$passwordHelp = '';
@@ -33,7 +32,7 @@ function RenderControl($val, $name, $type, $cols, $label, $helptext)
 EOT;
 }
 
-function RenderGroup($success, $control) {
+function render_grp($success, $control) {
 	$validation = '';
 
 	switch ($success) {
@@ -57,37 +56,24 @@ function RenderGroup($success, $control) {
 EOT;
 }
 
-function SanitizeInput(&$values, &$link) {
+function sanitize_input(&$values, &$link) {
 
-	$values['username']				= $_POST["username"];
-	$values['password']				= $_POST["password"];
-	$values['verifyPassword']		= $_POST["verifyPassword"];
-	$values['firstname']				= $_POST["firstname"];
-	$values['surname']				= $_POST["surname"];
-	$values['homeaddress']			= $_POST["homeaddress"];
-	$values['zipcode']				= $_POST["zipcode"];
-	$values['city']					= $_POST["city"];
-	$values['country']				= $_POST["country"];
-
-	// Protects against SQLi.
-	$values['username']				= mysqli_real_escape_string($link, $values['username']);
-	$values['password']				= mysqli_real_escape_string($link, $values['password']);
-	$values['verifyPassword']		= mysqli_real_escape_string($link, $values['verifyPassword']);
-	$values['firstname']				= mysqli_real_escape_string($link, $values['firstname']);
-	$values['surname']				= mysqli_real_escape_string($link, $values['surname']);
-	$values['homeaddress']			= mysqli_real_escape_string($link, $values['homeaddress']);
-	$values['zipcode']				= mysqli_real_escape_string($link, $values['zipcode']);
-	$values['city']					= mysqli_real_escape_string($link, $values['city']);
-	$values['country']				= mysqli_real_escape_string($link, $values['country']);
+	$values['username']				= htmlspecialchars($_POST["username"]);
+	$values['password']				= htmlspecialchars($_POST["password"]);
+	$values['verifyPassword']		= htmlspecialchars($_POST["verifyPassword"]);
+	$values['firstname']			= htmlspecialchars($_POST["firstname"]);
+	$values['surname']				= htmlspecialchars($_POST["surname"]);
+	$values['homeaddress']			= htmlspecialchars($_POST["homeaddress"]);
+	$values['zipcode']				= htmlspecialchars($_POST["zipcode"]);
+	$values['city']					= htmlspecialchars($_POST["city"]);
+	$values['country']				= htmlspecialchars($_POST["country"]);
 }
 
-function VerifyPasswords(&$password, &$verifyPassword)
-{
+function verify_password(&$password, &$verifyPassword) {
 	return strcmp($password, $verifyPassword) === 0 && !empty($password) && strlen($password) >= 12;
 }
 
-function IsInputValid(&$values)
-{
+function IsInputValid(&$values) {
 	$result = !empty($values['username']) &&
 				 !empty($values['password']) &&
 				 !empty($values['verifyPassword']) &&
@@ -101,13 +87,11 @@ function IsInputValid(&$values)
 	return $result;
 }
 
-function IsFormValid(&$values) {
-	$result = IsInputValid($values) && VerifyPasswords($values['password'], $values['verifyPassword']);
+function is_form_valid(&$values) {
+	$result = IsInputValid($values) && verify_password($values['password'], $values['verifyPassword']);
 
 	return $result;
 }
-
-
 
 	// Render validation
 	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -117,23 +101,23 @@ function IsFormValid(&$values) {
 				<form class="form-horizontal" role="form" action="index.php" method="post">
 EOT;
 
-		SanitizeInput($values, $link);
+		sanitize_input($values, $link);
 		
-		$isFormValid = IsFormValid($values);
+		$isFormValid = is_form_valid($values);
 
 		if (!$isFormValid) {
 
-			$passwordSuccess = VerifyPasswords($values['password'], $values['verifyPassword']);
+			$passwordSuccess = verify_password($values['password'], $values['verifyPassword']);
 
-			RenderGroup(!empty($values['username']) ? 'success' : 'error',		RenderControl($values['username'], 'username', 'text', 4, 'Username', 'Enter Username'));
-			RenderGroup($passwordSuccess ? 'success' : 'error',					RenderControl('', 'password', 'password', 4, 'Password','Enter Password'));
-			RenderGroup($passwordSuccess ? 'success' : 'error',					RenderControl('', 'verifyPassword', 'password', 4, 'Verify Password', 'Verify Password'));
-			RenderGroup(!empty($values['firstname']) ? 'success' : 'error',	RenderControl($values['firstname'], 'firstname', 'text', 4,'First Name', 'Enter First Name'));
-			RenderGroup(!empty($values['surname']) ? 'success' : 'error', 		RenderControl($values['surname'],   'surname',   'text', 4,'Sur Name', 'Enter Sur Name'));
-			RenderGroup(!empty($values['homeaddress'])? 'success' : 'error',	RenderControl($values['homeaddress'], 'homeaddress', 'text', 4,'Home Address', 'Enter Home Address'));
-			RenderGroup(!empty($values['zipcode']) ? 'success' : 'error',		RenderControl($values['zipcode'],   'zipcode',   'text', 4,'Zip Code', 'Enter Zip Code'));
-			RenderGroup(!empty($values['city']) ? 'success' : 'error',			RenderControl($values['city'], 'city', 'text', 4,'City', 'Enter City'));
-			RenderGroup(!empty($values['country']) ? 'success' : 'error',		RenderControl($values['country'],   'country',   'text', 4,'Country', 'Enter Country'));
+			render_grp(!empty($values['username']) ? 'success' : 'error',		render_ctrl($values['username'], 'username', 'text', 4, 'Username', 'Enter Username'));
+			render_grp($passwordSuccess ? 'success' : 'error',					render_ctrl('', 'password', 'password', 4, 'Password','Enter Password'));
+			render_grp($passwordSuccess ? 'success' : 'error',					render_ctrl('', 'verifyPassword', 'password', 4, 'Verify Password', 'Verify Password'));
+			render_grp(!empty($values['firstname']) ? 'success' : 'error',	render_ctrl($values['firstname'], 'firstname', 'text', 4,'First Name', 'Enter First Name'));
+			render_grp(!empty($values['surname']) ? 'success' : 'error', 		render_ctrl($values['surname'],   'surname',   'text', 4,'Sur Name', 'Enter Sur Name'));
+			render_grp(!empty($values['homeaddress'])? 'success' : 'error',	render_ctrl($values['homeaddress'], 'homeaddress', 'text', 4,'Home Address', 'Enter Home Address'));
+			render_grp(!empty($values['zipcode']) ? 'success' : 'error',		render_ctrl($values['zipcode'],   'zipcode',   'text', 4,'Zip Code', 'Enter Zip Code'));
+			render_grp(!empty($values['city']) ? 'success' : 'error',			render_ctrl($values['city'], 'city', 'text', 4,'City', 'Enter City'));
+			render_grp(!empty($values['country']) ? 'success' : 'error',		render_ctrl($values['country'],   'country',   'text', 4,'Country', 'Enter Country'));
 			
 			echo <<<EOT
 	
@@ -159,15 +143,15 @@ EOT;
 			<div class="row">
 				<form class="form-horizontal" role="form" action="index.php" method="post">
 EOT;
-		RenderGroup('', RenderControl($values['username'], 'username', 'text', 4, 'Username', 'Enter Username'));
-		RenderGroup('', RenderControl('', 'password', 'password', 4, 'Password','Enter Password'));
-		RenderGroup('', RenderControl('', 'verifyPassword', 'password', 4, 'Verify Password', 'Verify Password'));
-		RenderGroup('', RenderControl($values['firstname'], 'firstname', 'text', 4,'First Name', 'Enter First Name'));
-		RenderGroup('', RenderControl($values['surname'],   'surname',   'text', 4,'Sur Name', 'Enter Sur Name'));
-		RenderGroup('', RenderControl($values['homeaddress'], 'homeaddress', 'text', 4,'Home Address', 'Enter Home Address'));
-		RenderGroup('', RenderControl($values['zipcode'],   'zipcode',   'text', 4,'Zip Code', 'Enter Zip Code'));
-		RenderGroup('', RenderControl($values['city'], 'city', 'text', 4,'City', 'Enter City'));
-		RenderGroup('', RenderControl($values['country'],   'country',   'text', 4,'Country', 'Enter Country'));
+		render_grp('', render_ctrl($values['username'], 'username', 'text', 4, 'Username', 'Enter Username'));
+		render_grp('', render_ctrl('', 'password', 'password', 4, 'Password','Enter Password'));
+		render_grp('', render_ctrl('', 'verifyPassword', 'password', 4, 'Verify Password', 'Verify Password'));
+		render_grp('', render_ctrl($values['firstname'], 'firstname', 'text', 4,'First Name', 'Enter First Name'));
+		render_grp('', render_ctrl($values['surname'],   'surname',   'text', 4,'Sur Name', 'Enter Sur Name'));
+		render_grp('', render_ctrl($values['homeaddress'], 'homeaddress', 'text', 4,'Home Address', 'Enter Home Address'));
+		render_grp('', render_ctrl($values['zipcode'],   'zipcode',   'text', 4,'Zip Code', 'Enter Zip Code'));
+		render_grp('', render_ctrl($values['city'], 'city', 'text', 4,'City', 'Enter City'));
+		render_grp('', render_ctrl($values['country'],   'country',   'text', 4,'Country', 'Enter Country'));
 
 		echo <<<EOT
 	
@@ -193,28 +177,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	if ($isFormValid) {
 
 		// Create salt
-		$sitewide_key = "eitf05 secure web shop sitewide key";
 		$salt = uniqid(mt_rand(), true);
 
-		// Create password hash
+		// Create password hash, sitewide_key in config.php
 		$password = hash_hmac('sha512', $values['password'] . $salt, $sitewide_key);
 
 		// Create a prepared mysql statement
 		//Prepare the statement by giving the SQL logic
-		$stmt = mysqli_prepare($link, "INSERT INTO users (username, passwordhash, salt, firstname, surname, homeaddress, zipcode, city, country) VALUES (?,?,?,?,?,?,?,?,?)");
-		//Bind parameters and result, execute and fetch parameters
-		mysqli_stmt_bind_param($stmt,"sssssssss", 
-			$values['username'],
-			$values['password'],
-			$values['verifyPassword'],
-			$values['firstname'],
-			$values['surname'],
-			$values['homeaddress'],
-			$values['zipcode'],
-			$values['city'],
-			$values['country']);
+		$stmt = $db->prepare("INSERT INTO users (username, passwordhash, salt, firstname, surname, homeaddress, zipcode, city, country) " . 
+			"VALUES (:username, :passwordHash, :salt, :firstname, :surname, :homeaddress, :zipcode, :city, :country)");
+		
+		$stmt->bindParam(':username', $values['username'], PDO::PARAM_STR);
+		$stmt->bindParam(':passwordHash', $password, PDO::PARAM_STR);
+		$stmt->bindParam(':salt', $salt, PDO::PARAM_STR);
+		$stmt->bindParam(':firstname', $values['firstname'], PDO::PARAM_STR);
+		$stmt->bindParam(':surname', $values['surname'], PDO::PARAM_STR);
+		$stmt->bindParam(':homeaddress', $values['homeaddress'], PDO::PARAM_STR);
+		$stmt->bindParam(':zipcode', $values['zipcode'], PDO::PARAM_STR);
+		$stmt->bindParam(':city', $values['city'], PDO::PARAM_STR);
+		$stmt->bindParam(':country', $values['country'], PDO::PARAM_STR);
 
-		mysqli_stmt_execute($stmt);
+		$stmt->execute();
 
 		// User created successfully
 		echo <<<EOT
