@@ -14,8 +14,6 @@
 		<link href="dist/css/bootstrap.css" rel="stylesheet">
 		<link href="assets/css/custom.css" rel="stylesheet">
 
-		
-
 		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>
 			<script src="assets/js/html5shiv.js"></script>
