@@ -12,8 +12,8 @@
 	// Store in session variable that we are logged in
 	// Redirect to index.php
 
-	$email = htmlspecialchars($_POST['email']);
-	$password = htmlspecialchars($_POST['password']);
+	$email = $_POST['email'];
+	$password = $_POST['password'];
 
 	$stmt = $db->prepare("SELECT salt, passwordhash FROM users WHERE username=:username");
 	$stmt->bindParam(':username', $email, PDO::PARAM_STR);

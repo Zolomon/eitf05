@@ -15,6 +15,7 @@ $values = [
 $isInputValid = FALSE;
 
 function render_ctrl($val, $name, $type, $cols, $label, $helptext) {
+	// Only escape when outputting as HTML to protect user-agent
 	$val = htmlspecialchars($val);
 
 	$passwordHelp = '';
@@ -56,24 +57,23 @@ function render_grp($success, $control) {
 EOT;
 }
 
-function sanitize_input(&$values, &$link) {
-
-	$values['username']				= htmlspecialchars($_POST["username"]);
-	$values['password']				= htmlspecialchars($_POST["password"]);
-	$values['verifyPassword']		= htmlspecialchars($_POST["verifyPassword"]);
-	$values['firstname']			= htmlspecialchars($_POST["firstname"]);
-	$values['surname']				= htmlspecialchars($_POST["surname"]);
-	$values['homeaddress']			= htmlspecialchars($_POST["homeaddress"]);
-	$values['zipcode']				= htmlspecialchars($_POST["zipcode"]);
-	$values['city']					= htmlspecialchars($_POST["city"]);
-	$values['country']				= htmlspecialchars($_POST["country"]);
+function read_input(&$values, &$link) {
+	$values['username']			= $_POST["username"];
+	$values['password']			= $_POST["password"];
+	$values['verifyPassword']	= $_POST["verifyPassword"];
+	$values['firstname']			= $_POST["firstname"];
+	$values['surname']			= $_POST["surname"];
+	$values['homeaddress']		= $_POST["homeaddress"];
+	$values['zipcode']			= $_POST["zipcode"];
+	$values['city']				= $_POST["city"];
+	$values['country']			= $_POST["country"];
 }
 
 function verify_password(&$password, &$verifyPassword) {
 	return strcmp($password, $verifyPassword) === 0 && !empty($password) && strlen($password) >= 12;
 }
 
-function IsInputValid(&$values) {
+function is_input_valid(&$values) {
 	$result = !empty($values['username']) &&
 				 !empty($values['password']) &&
 				 !empty($values['verifyPassword']) &&
@@ -88,7 +88,7 @@ function IsInputValid(&$values) {
 }
 
 function is_form_valid(&$values) {
-	$result = IsInputValid($values) && verify_password($values['password'], $values['verifyPassword']);
+	$result = is_input_valid($values) && verify_password($values['password'], $values['verifyPassword']);
 
 	return $result;
 }
@@ -101,7 +101,7 @@ function is_form_valid(&$values) {
 				<form class="form-horizontal" role="form" action="index.php" method="post">
 EOT;
 
-		sanitize_input($values, $link);
+		read_input($values, $link);
 		
 		$isFormValid = is_form_valid($values);
 
@@ -109,10 +109,13 @@ EOT;
 
 			$passwordSuccess = verify_password($values['password'], $values['verifyPassword']);
 
-			render_grp(!empty($values['username']) ? 'success' : 'error',		render_ctrl($values['username'], 'username', 'text', 4, 'Username', 'Enter Username'));
-			render_grp($passwordSuccess ? 'success' : 'error',					render_ctrl('', 'password', 'password', 4, 'Password','Enter Password'));
-			render_grp($passwordSuccess ? 'success' : 'error',					render_ctrl('', 'verifyPassword', 'password', 4, 'Verify Password', 'Verify Password'));
-			render_grp(!empty($values['firstname']) ? 'success' : 'error',	render_ctrl($values['firstname'], 'firstname', 'text', 4,'First Name', 'Enter First Name'));
+			$valid_email = preg_match('/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/i', $values['username']);
+
+			render_grp(!empty($values['username']) && $valid_email ? 'success' : 'error',
+					render_ctrl($values['username'], 'username', 'text', 4, 'Email', 'Enter email'));
+			render_grp($passwordSuccess ? 'success' : 'error',						render_ctrl('', 'password', 'password', 4, 'Password','Enter Password'));
+			render_grp($passwordSuccess ? 'success' : 'error',						render_ctrl('', 'verifyPassword', 'password', 4, 'Verify Password', 'Verify Password'));
+			render_grp(!empty($values['firstname']) ? 'success' : 'error',		render_ctrl($values['firstname'], 'firstname', 'text', 4,'First Name', 'Enter First Name'));
 			render_grp(!empty($values['surname']) ? 'success' : 'error', 		render_ctrl($values['surname'],   'surname',   'text', 4,'Sur Name', 'Enter Sur Name'));
 			render_grp(!empty($values['homeaddress'])? 'success' : 'error',	render_ctrl($values['homeaddress'], 'homeaddress', 'text', 4,'Home Address', 'Enter Home Address'));
 			render_grp(!empty($values['zipcode']) ? 'success' : 'error',		render_ctrl($values['zipcode'],   'zipcode',   'text', 4,'Zip Code', 'Enter Zip Code'));
@@ -130,8 +133,6 @@ EOT;
 	</div>
 </div>
 EOT;
-
-
 		} else {
 			// POST && Validated --> Nothing to output, carry on.
 		}
@@ -143,7 +144,7 @@ EOT;
 			<div class="row">
 				<form class="form-horizontal" role="form" action="index.php" method="post">
 EOT;
-		render_grp('', render_ctrl($values['username'], 'username', 'text', 4, 'Username', 'Enter Username'));
+		render_grp('', render_ctrl($values['username'], 'username', 'text', 4, 'Email', 'Enter Email'));
 		render_grp('', render_ctrl('', 'password', 'password', 4, 'Password','Enter Password'));
 		render_grp('', render_ctrl('', 'verifyPassword', 'password', 4, 'Verify Password', 'Verify Password'));
 		render_grp('', render_ctrl($values['firstname'], 'firstname', 'text', 4,'First Name', 'Enter First Name'));
@@ -171,9 +172,6 @@ EOT;
 // presses the sign up button we will receive a POST. 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-	
-	// Input already sanitized	
-
 	if ($isFormValid) {
 
 		// Create salt
@@ -183,7 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$password = hash_hmac('sha512', $values['password'] . $salt, $sitewide_key);
 
 		// Create a prepared mysql statement
-		//Prepare the statement by giving the SQL logic
+		// PROTECTION: Prepared Statements protect against SQL injections.
 		$stmt = $db->prepare("INSERT INTO users (username, passwordhash, salt, firstname, surname, homeaddress, zipcode, city, country) " . 
 			"VALUES (:username, :passwordHash, :salt, :firstname, :surname, :homeaddress, :zipcode, :city, :country)");
 		

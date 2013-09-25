@@ -1,5 +1,4 @@
 <?php
-
 	// TODO: move this into a function.
 
 	include 'session.php';

@@ -47,6 +47,15 @@
 						<li><a href="signup.php" style="padding: 10px 0 0 0 ;"><button type="submit" class="btn-sm btn-primary">Sign Up</button></a><li>
 					</ul>
 
+					<?php 
+							if (isset($_SESSION['loggedin']) && $_SESSION['loggedin']) { 
+								echo <<<EOT
+					<form class="navbar-form navbar-right" action="logout.php" method="post">
+						<button type="submit" class="btn btn-error">Logout</button>
+					</form>
+EOT;
+							} else {
+								echo <<<EOT
 					<form class="navbar-form navbar-right" action="login.php" method="post">
 						<div class="form-group">
 							<input type="text" name="email" placeholder="Email" class="form-control">
@@ -58,21 +67,9 @@
 
 						<button type="submit" class="btn btn-success">Sign in</button>
 					</form>
-
-					<?php 
-							if (isset($_SESSION['loggedin']) && $_SESSION['loggedin']) { 
-								echo <<<EOT
-					<form class="navbar-form navbar-right" action="logout.php" method="post">
-						<button type="submit" class="btn btn-error">Logout</button>
-					</form>
 EOT;
 							}
-						?>
-
-					<ul class="nav navbar-nav">
-						
-					</ul>
-					
+						?>					
 				</div><!--/.navbar-collapse -->
 
 			</div>
