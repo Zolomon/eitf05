@@ -56,7 +56,10 @@ EOT;
 								echo <<<EOT
 					<form class="navbar-form navbar-right" action="login.php" method="post">
 						<div class="form-group">
-							<input type="text" name="email" placeholder="Email" class="form-control">
+							<div class="input-group">
+								<span class="input-group-addon" style="width:auto;">@</span>
+								<input type="text" name="email" placeholder="Email" class="form-control">
+							</div>
 						</div>
 
 						<div class="form-group">

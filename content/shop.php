@@ -1,7 +1,18 @@
 <?php
 
-function display_items(&$stmt) 
+$loggedin = isset($_SESSION['loggedin']) && $_SESSION['loggedin'];
+
+function display_items(&$stmt, $loggedin) 
 {
+	$extraFields = "";
+
+	if ($loggedin) {
+		$extraFields = <<<EOT
+							<th>Count</th>
+							<th>Add?</th>
+EOT;
+	}
+
 	echo <<<EOT
 	<div class='container'>
 		<div class='row'>
@@ -13,32 +24,38 @@ function display_items(&$stmt)
 							<th>Item</th>
 							<th>Description</th>
 							<th>Price</th>
-							<th>Count</th>
-							<th>Add?</th>
+							$extraFields
 						</tr>
 						</thead>
 EOT;
 	while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
-		$name = $result['name'];
+		$name = htmlspecialchars($result['name']); // protect against XSS
 		
 		if(strlen($name) > 20){
-			$name = substr($name, 0, 18) . "...";
+			$name = substr($name, 0, 18) . "..."; // protect against XSS
 		}
 
-		$description = $result['description'];
+		$description = htmlspecialchars($result['description']);
 		
 		if(strlen($description) > 100){
-			$description = substr($description, 0, 98) . "...";
+			$description = substr($description, 0, 98) . "..."; // protect against XSS
+		}
+
+		$extraFields = "";
+		if ($loggedin) {
+			$extraFields = <<<EOT
+				<td><div class="col-sm-12"><input type="text" class="form-control input-sm" name="count_\${$result['id']}" value="0"></div></td>
+				<td><input type="checkbox" name="count[]" value="item_\${$result['id']}" /></td>
+EOT;
 		}
 
 		echo <<<EOT
 			<tr>
-				<td>\${$result['id']}</td>
+				<td>{$result['id']}</td>
 				<td>$name</td>
 				<td>$description</td>
-				<td>\${$result['price']}</td>
-				<td><div class="col-sm-12"><input type="text" class="form-control input-sm" name="count_\${$result['id']}" value="0"></div></td>
-				<td><input type="checkbox" name="count[]" value="item_\${$result['id']}" /></td>
+				<td>\$ {$result['price']}</td>
+				$extraFields
 			</tr>
 EOT;
 		//printf("<div class='col-md-4'>%s \$%s:<br><br>%s</div>", $result['name'], $result['price'], $result['description']);
@@ -73,14 +90,13 @@ if ($stmt = $db->prepare("SELECT id, name, description, price FROM items LIMIT :
 	 /* execute query */
 	$stmt->execute();
 
-	display_items($stmt);
+	display_items($stmt, $loggedin);
 
 	//echo "true";
 } else {
 	echo "false";
 }
 ?>
-
 
 <form role="form" action="additem.php" method="post">
   <div class="form-group">

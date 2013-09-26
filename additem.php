@@ -1,5 +1,6 @@
 <?php
 	include 'config.php';
+	
 	function add_item(&$db, $name, $description, $price) {
 		if ($stmt = $db->prepare("INSERT into items (name, description, price) VALUES (:name, :description, CAST(:price AS DECIMAL))")) {
 			$stmt->bindParam(':name', $name, PDO::PARAM_STR);

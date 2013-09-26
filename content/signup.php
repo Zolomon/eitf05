@@ -1,5 +1,4 @@
 <?php
-
 $values = [ 
 'username' 			=> NULL,
 'password'			=> NULL,
@@ -24,9 +23,16 @@ function render_ctrl($val, $name, $type, $cols, $label, $helptext) {
 		$passwordHelp = '<span class="help-block">Password must be 12 characters or longer.</span>';
 	}
 
+	$inputGroup = "";
+
+	if ($name === 'username') {
+		$inputGroup = '<span class="input-group-addon">@</span>';
+	}
+
 	return <<<EOT
 	<label for="$name" class="col-md-2 control-label">$label</label>
-	<div class="col-md-$cols">
+	<div class="input-group col-md-$cols">
+		$inputGroup
 		<input value="$val" type="$type" class="form-control" id="$name" name="$name" placeholder="$helptext">
 		$passwordHelp
 	</div>
