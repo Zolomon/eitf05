@@ -2,7 +2,7 @@
 	include 'config.php';
 	
 	function add_item(&$db, $name, $description, $price) {
-		if ($stmt = $db->prepare("INSERT into items (name, description, price) VALUES (:name, :description, CAST(:price AS DECIMAL))")) {
+		if ($stmt = $db->prepare("INSERT into items (name, description, price) VALUES (:name, :description, :price)")) {
 			$stmt->bindParam(':name', $name, PDO::PARAM_STR);
 			$stmt->bindParam(':description', $description, PDO::PARAM_STR);
 			$stmt->bindValue(':price', strval($price), PDO::PARAM_STR);
