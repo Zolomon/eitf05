@@ -15,11 +15,12 @@
 	$email = $_POST['email'];
 	$password = $_POST['password'];
 
-	$stmt = $db->prepare("SELECT salt, passwordhash FROM users WHERE username=:username");
+	$stmt = $db->prepare("SELECT id, salt, passwordhash FROM users WHERE username=:username");
 	$stmt->bindParam(':username', $email, PDO::PARAM_STR);
 	$stmt->execute();
 	$rows = $stmt->fetchAll();
 
+	$user_id = $rows[0]["id"];
 	$salt = $rows[0]["salt"];
 	$storedHash = $rows[0]["passwordhash"];
 
@@ -29,6 +30,9 @@
 	$success = $hash === $storedHash;
 
 	$_SESSION["loggedin"] = $success;
+	if($success){
+		$_SESSION["user"] = $user_id;
+	}
 
 	session_write_close();
 

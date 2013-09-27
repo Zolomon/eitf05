@@ -85,7 +85,7 @@ EOT;
 		$extraFields = "";
 		if ($loggedin) {
 			$extraFields = <<<EOT
-				<td><div class="col-sm-12"><input type="text" class="form-control input-sm" name="count_\${$result['id']}" value="0"></div></td>
+				<td><div class="col-sm-12"><input type="text" class="form-control input-sm" name="count_\${$result['id']}" value="1"></div></td>
 				<td><input type="checkbox" name="count[]" value="item_\${$result['id']}" /></td>
 EOT;
 		}
