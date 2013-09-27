@@ -39,17 +39,18 @@
 						$active_shop = "";
 						$active_cart = "";
 						$active_checkout = "";
-						switch ($_SESSION['site']) {
-							case 'shop':
-								$active_shop = " class=\"active\"";
-								break;
-							case 'cart':
-								$active_cart = " class=\"active\"";
-								break;
-							case 'checkout':
-								$active_checkout = " class=\"active\"";
+						if(isset($_SESSION['site'])){
+							switch ($_SESSION['site']) {
+								case 'shop':
+									$active_shop = " class=\"active\"";
+									break;
+								case 'cart':
+									$active_cart = " class=\"active\"";
+									break;
+								case 'checkout':
+									$active_checkout = " class=\"active\"";
+							}
 						}
-
 
 						echo "<li$active_shop><a href='shop.php'>1. Shop</a></li>";
 						 
