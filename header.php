@@ -35,13 +35,29 @@
 
 				<div class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
-						<li class="active"><a href="shop.php">1. Shop</a></li>
-						<?php 
+					<?php
+						$active_shop = "";
+						$active_cart = "";
+						$active_checkout = "";
+						switch ($_SESSION['site']) {
+							case 'shop':
+								$active_shop = " class=\"active\"";
+								break;
+							case 'cart':
+								$active_cart = " class=\"active\"";
+								break;
+							case 'checkout':
+								$active_checkout = " class=\"active\"";
+						}
+
+
+						echo "<li$active_shop><a href='shop.php'>1. Shop</a></li>";
+						 
 							if (isset($_SESSION['loggedin']) && $_SESSION['loggedin']) { 
-								echo '<li><a href="cart.php">2. Cart</a></li>';
-								echo '<li><a href="checkout.php">3. Checkout</a></li>';
+								echo "<li$active_cart><a href='cart.php'>2. Cart</a></li>";
+								echo "<li$active_checkout><a href='checkout.php'>3. Checkout</a></li>";
 							}
-						?>
+					?>
 						<li><a href="signup.php" style="padding: 10px 0 0 0 ;"><button type="submit" class="btn-sm btn-primary">Sign Up</button></a><li>
 					</ul>
 
