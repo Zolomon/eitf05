@@ -72,14 +72,18 @@ EOT;
 	while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
 		$name = htmlspecialchars($result['name']); // protect against XSS
 		
-		if(strlen($name) > 20){
-			$name = substr($name, 0, 18) . "..."; // protect against XSS
+		if(strlen($name) > 30){
+			$name = " title=\"" . $name . "\">" . substr($name, 0, 28) . "..."; // protect against XSS
+		} else {
+			$name = ">" . $name;
 		}
 
 		$description = htmlspecialchars($result['description']);
 		
 		if(strlen($description) > 100){
-			$description = substr($description, 0, 98) . "..."; // protect against XSS
+			$description = " title=\"" . $description . "\">" . substr($description, 0, 98) . "..."; // protect against XSS
+		} else {
+			$description = ">" . $description;
 		}
 
 		$extraFields = "";
@@ -93,9 +97,9 @@ EOT;
 		echo <<<EOT
 			<tr>
 				<td>{$result['id']}</td>
-				<td>$name</td>
-				<td>$description</td>
-				<td>\$ {$result['price']}</td>
+				<td$name</td>
+				<td$description</td>
+				<td>\${$result['price']}</td>
 				$extraFields
 			</tr>
 EOT;
