@@ -30,7 +30,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="#">EITF05: SWS</a>
+					<a class="navbar-brand" href="shop.php">EITF05: SWS</a>
 				</div>
 
 				<div class="navbar-collapse collapse">

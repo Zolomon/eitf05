@@ -15,7 +15,7 @@ if(isset($_POST['count'])){
     		//echo "You cannot add more than 100 items at a time!";
     	} else {
 	    	for ($i = 1; $i <= $count; $i++){
-	    		$stmt = $db->prepare("INSERT into cart (user_id, item_id) VALUES (:user_id, :item_id)");
+	    		$stmt = $db->prepare("INSERT into cart (user_id, item_id) VALUES (:user_id, :item_id);");
 	    		$stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
 	    		$stmt->bindParam(':item_id', $item_id, PDO::PARAM_INT);
 	    		$stmt->execute();
