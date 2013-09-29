@@ -2,7 +2,7 @@
 
 $loggedin = isset($_SESSION['loggedin']) && $_SESSION['loggedin'];
 
-function display_items(&$stmt, $loggedin) 
+function display_items(&$stmt, $loggedin, $shop_page_items) 
 {
 	$extraFields = "";
 
@@ -28,6 +28,10 @@ EOT;
 						</tr>
 						</thead>
 EOT;
+	$items = array();
+	$idx = 0;
+	$id = 0;
+
 	while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
 		$name = htmlspecialchars($result['name']); // protect against XSS
 		
@@ -41,17 +45,19 @@ EOT;
 			$description = substr($description, 0, 98) . "..."; // protect against XSS
 		}
 
+		$id = $result['id'];
+
 		$extraFields = "";
 		if ($loggedin) {
 			$extraFields = <<<EOT
-				<td><div class="col-sm-12"><input type="text" class="form-control input-sm" name="count_\${$result['id']}" value="0"></div></td>
-				<td><input type="checkbox" name="count[]" value="item_\${$result['id']}" /></td>
+				<td><div class="col-sm-12"><input type="text" class="form-control input-sm" name="count[$idx]" value="0"></div></td>
+				<td><input type="checkbox" name="add[$idx]" value="$id" /></td>
 EOT;
 		}
 
 		echo <<<EOT
 			<tr>
-				<td>{$result['id']}</td>
+				<td>$id</td>
 				<td>$name</td>
 				<td>$description</td>
 				<td>\$ {$result['price']}</td>
@@ -59,7 +65,10 @@ EOT;
 			</tr>
 EOT;
 		//printf("<div class='col-md-4'>%s \$%s:<br><br>%s</div>", $result['name'], $result['price'], $result['description']);
+
+		$items[$idx++] = $id;
 	}
+
 	echo <<<EOT
 			</table>
 			<div class="form-group">
@@ -90,7 +99,7 @@ if ($stmt = $db->prepare("SELECT id, name, description, price FROM items LIMIT :
 	 /* execute query */
 	$stmt->execute();
 
-	display_items($stmt, $loggedin);
+	display_items($stmt, $loggedin, $shop_page_items);
 
 	//echo "true";
 } else {
