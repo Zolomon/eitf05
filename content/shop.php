@@ -1,6 +1,47 @@
 <?php
 
 $loggedin = isset($_SESSION['loggedin']) && $_SESSION['loggedin'];
+function display_pagination($shop_page, $nbr_pages) 
+{
+	echo <<<EOT
+	<div class='container'>
+			<div class='row' align="center">
+				<ul class="pagination">
+EOT;
+	if ($shop_page == 1) {
+		echo "<li class='disabled'><span>&laquo;</span></li>";
+	} else {
+		$next_page = $shop_page - 1;
+		if ($next_page == 1) {
+			echo "<li><a href='index.php'>&laquo;</a></li>";
+		} else {
+			echo "<li><a href='index.php?page_nbr=$next_page'>&laquo;</a></li>";
+		}
+	}
+	if($shop_page == 1){
+		echo "<li class='active'><a href='index.php'>1</a></li>";
+	} else {
+		echo "<li><a href='index.php'>1</a></li>";
+	}
+	for ($pindex = 2; $pindex <= $nbr_pages; $pindex++) {
+		if ($shop_page == $pindex){
+			echo "<li class='active'><a href='index.php?page_nbr=$pindex'>$pindex</a></li>";
+		} else {
+			echo "<li><a href='index.php?page_nbr=$pindex'>$pindex</a></li>";
+		}
+	}
+	if ($shop_page == $nbr_pages){
+		echo "<li class='disabled'><span>&raquo;</span></li>";
+	}else{
+		$next_page = $shop_page + 1;
+		echo "<li><a href='index.php?page_nbr=$next_page'>&raquo;</a></li>";
+	}
+	echo <<<EOT
+			</ul>
+		</div>
+	</div>
+EOT;
+}
 
 function display_items(&$stmt, $loggedin, $shop_page_items) 
 {
@@ -35,14 +76,18 @@ EOT;
 	while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
 		$name = htmlspecialchars($result['name']); // protect against XSS
 		
-		if(strlen($name) > 20){
-			$name = substr($name, 0, 18) . "..."; // protect against XSS
+		if(strlen($name) > 30){
+			$name = " title=\"" . $name . "\">" . substr($name, 0, 28) . "..."; // protect against XSS
+		} else {
+			$name = ">" . $name;
 		}
 
 		$description = htmlspecialchars($result['description']);
 		
 		if(strlen($description) > 100){
-			$description = substr($description, 0, 98) . "..."; // protect against XSS
+			$description = " title=\"" . $description . "\">" . substr($description, 0, 98) . "..."; // protect against XSS
+		} else {
+			$description = ">" . $description;
 		}
 
 		$id = $result['id'];
@@ -50,8 +95,13 @@ EOT;
 		$extraFields = "";
 		if ($loggedin) {
 			$extraFields = <<<EOT
+<<<<<<< HEAD
 				<td><div class="col-sm-12"><input type="text" class="form-control input-sm" name="count[$idx]" value="0"></div></td>
 				<td><input type="checkbox" name="add[$idx]" value="$id" /></td>
+=======
+				<td><div class="col-sm-12"><input type="text" class="form-control input-sm" name="count_\${$result['id']}" value="1"></div></td>
+				<td><input type="checkbox" name="count[]" value="item_\${$result['id']}" /></td>
+>>>>>>> 90f2e961b74cd3cb30c41f05e920fafd02f87087
 EOT;
 		}
 
@@ -83,27 +133,37 @@ EOT;
 
 }
 
-/*
-function UpdateCurrPageNbr(){
-	
-}
-*/
-
-if ($stmt = $db->prepare("SELECT id, name, description, price FROM items LIMIT :shop_page_items, 15;")) {
-	
-	/* bind parameters for markers */
+/* Get the current page number */
+if (isset($_GET["page_nbr"])){
+	$shop_page = $_GET["page_nbr"];
+} else {
 	$shop_page = 1;
+}
+
+/* Make the list of items */
+if ($stmt = $db->prepare("SELECT id, name, description, price FROM items LIMIT :shop_page_items, 15;")) {
+	/* bind parameters for markers */
 	$shop_page_items = ($shop_page-1)*15;
 	$stmt->bindParam(':shop_page_items', $shop_page_items, PDO::PARAM_INT);
 
-	 /* execute query */
+	/* execute query */
 	$stmt->execute();
 
 	display_items($stmt, $loggedin, $shop_page_items);
-
-	//echo "true";
+	//display_items($stmt, $loggedin);
 } else {
-	echo "false";
+	echo "Database error when getting items";
+}
+
+/* Make the pagination at the bottom */
+if ($counter = $db->prepare("SELECT COUNT(*) FROM items")) {
+	/* execute query */
+	$counter->execute();
+
+	$nbr_pages = (int)(($counter->fetchColumn()-1) / 15) + 1;
+	display_pagination($shop_page, $nbr_pages);
+} else {
+		echo "Database error when getting number of items";
 }
 ?>
 
