@@ -18,7 +18,8 @@ function display_items(&$stmt, &$db, $user_id)
 						</tr>
 					</thead>
 EOT;
-	$already_in_list = array();
+	$before_update = array();
+	//$already_in_list = array();
 	$total_sum = 0;
 	while ($result = $stmt->fetch(PDO::FETCH_ASSOC)){
 			$item_id = $result['item_id'];
@@ -26,14 +27,15 @@ EOT;
 				$stmt2->bindParam(':item_id', $item_id, PDO::PARAM_INT);
 				$stmt2->execute();
 
-				if (!array_key_exists($item_id, $already_in_list)){
-					$already_in_list[$item_id] = 1;
+				if (!array_key_exists($item_id, $before_update)){
+					//$already_in_list[$item_id] = 1;
 					$count_s = $db->prepare("SELECT COUNT(id) AS count FROM cart WHERE item_id=:item_id AND user_id=:user_id;");
 					$count_s->bindParam(':item_id', $item_id, PDO::PARAM_INT);
 					$count_s->bindParam(':user_id', $user_id, PDO::PARAM_INT);
 					$count_s->execute();
 					$cres = $count_s->fetch(PDO::FETCH_ASSOC);
 					$count = $cres['count'];
+					$before_update[$item_id] = $count;
 					while ($result = $stmt2->fetch(PDO::FETCH_ASSOC)) {
 						$name = htmlspecialchars($result['name']); // protect against XSS
 						
@@ -72,6 +74,7 @@ EOT;
 				}
 			}
 		}
+		$_SESSION['before_update'] = $before_update;
 		$total_sum = number_format((float)$total_sum, 2, '.', '');
 		echo <<<EOT
 					<tfoot>
