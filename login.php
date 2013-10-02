@@ -36,10 +36,6 @@
 
 	session_write_close();
 
-	var_dump($success);
-	var_dump($storedHash);
-	var_dump($hash);
-
-	//header('Location: index.php', true, 302);
-	//exit();
+	header('Location: index.php', true, 302);
+	exit();
 ?>
