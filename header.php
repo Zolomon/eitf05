@@ -62,11 +62,14 @@
 					</ul>
 
 					<?php 
-							if (isset($_SESSION['loggedin']) && $_SESSION['loggedin']) { 
+							if (isset($_SESSION['loggedin']) && $_SESSION['loggedin']) {
+								$username = $_SESSION['username'];
 								echo <<<EOT
+					
 					<form class="navbar-form navbar-right" action="logout.php" method="post">
 						<button type="submit" class="btn btn-error">Logout</button>
 					</form>
+					<div class="navbar-right"><h4><p style="color:white">$username</p></h4></div>
 EOT;
 							} else {
 								echo <<<EOT

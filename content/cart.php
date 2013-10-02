@@ -1,10 +1,10 @@
 <?php
-function display_items(&$stmt, &$db) 
+function display_items(&$stmt, &$db, $user_id) 
 {
 	echo <<<EOT
 	<div class='container'>
 		<div class='row'>
-			<form class="form-horizontal" role="form" action="modify_cart.php" method="post">
+			<form class="form-horizontal" role="form" action="remove_from_cart.php" method="post">
 				<table class='table table-striped' width='400'>
 					<thead>
 						<tr>
@@ -18,7 +18,8 @@ function display_items(&$stmt, &$db)
 						</tr>
 					</thead>
 EOT;
-	$already_in_list = array();
+	$before_update = array();
+	//$already_in_list = array();
 	$total_sum = 0;
 	while ($result = $stmt->fetch(PDO::FETCH_ASSOC)){
 			$item_id = $result['item_id'];
@@ -26,13 +27,15 @@ EOT;
 				$stmt2->bindParam(':item_id', $item_id, PDO::PARAM_INT);
 				$stmt2->execute();
 
-				if (!array_key_exists($item_id, $already_in_list)){
-					$already_in_list[$item_id] = 1;
-					$count_s = $db->prepare("SELECT COUNT(id) AS count FROM cart WHERE item_id=:item_id;");
+				if (!array_key_exists($item_id, $before_update)){
+					//$already_in_list[$item_id] = 1;
+					$count_s = $db->prepare("SELECT COUNT(id) AS count FROM cart WHERE item_id=:item_id AND user_id=:user_id;");
 					$count_s->bindParam(':item_id', $item_id, PDO::PARAM_INT);
+					$count_s->bindParam(':user_id', $user_id, PDO::PARAM_INT);
 					$count_s->execute();
 					$cres = $count_s->fetch(PDO::FETCH_ASSOC);
 					$count = $cres['count'];
+					$before_update[$item_id] = $count;
 					while ($result = $stmt2->fetch(PDO::FETCH_ASSOC)) {
 						$name = htmlspecialchars($result['name']); // protect against XSS
 						
@@ -62,8 +65,8 @@ EOT;
 								<td$description</td>
 								<td>\${$result['price']}</td>
 								<td>\$$sum</td>
-								<td><div class="col-sm-12"><input type="text" class="form-control input-sm" name="count_\${$result['id']}" value="$count"></div></td>
-								<td><button type="submit" class="btn-sm btn-danger">X</button></td>
+								<td><div class="col-sm-12"><input type="text" class="form-control input-sm" name="update[$item_id]" value="$count"></div></td>
+								<td><button type="submit" class="btn-sm btn-danger" name="remove" value="$item_id">X</button></td>
 							</tr>
 EOT;
 						//printf("<div class='col-md-4'>%s \$%s:<br><br>%s</div>", $result['name'], $result['price'], $result['description']);
@@ -71,6 +74,7 @@ EOT;
 				}
 			}
 		}
+		$_SESSION['before_update'] = $before_update;
 		$total_sum = number_format((float)$total_sum, 2, '.', '');
 		echo <<<EOT
 					<tfoot>
@@ -104,7 +108,7 @@ if (isset($_SESSION['user'])){
 	if ($stmt = $db->prepare("SELECT item_id FROM cart WHERE user_id=:user_id;")){
 		$stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
 		$stmt->execute();
-		display_items($stmt, $db);
+		display_items($stmt, $db, $user_id);
 	}
 } else {
 	echo "Error, no user available";

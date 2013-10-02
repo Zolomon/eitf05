@@ -32,6 +32,7 @@
 	$_SESSION["loggedin"] = $success;
 	if($success){
 		$_SESSION["user"] = $user_id;
+		$_SESSION["username"] = $email;
 	}
 
 	session_write_close();
