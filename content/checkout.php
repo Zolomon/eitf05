@@ -148,7 +148,7 @@ EOT;
   				</div>
 				<div class="container"><br>
 					<div class="form-group">
-						<div class="col-lg-offset-10 col-lg-10">
+						<div class="col-lg-offset-10">
 							<button type="submit" class="btn-lg btn-success" name="pay">Pay</button>
 						</div>
 					</div>
