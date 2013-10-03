@@ -8,11 +8,10 @@ $_SESSION['site'] = 'shop';
 var_dump($_POST);
 $user_id = $_SESSION['user'];
 
-if(isset($_POST['count'])){
-    foreach($_POST['count'] as $value){
-    	$item_id = substr($value, 6);
-    	$count_s = "count_\$" . $item_id;
-    	$count = intval($_POST[$count_s]);
+if(isset($_POST['add'])){
+    foreach($_POST['add'] as $item_id){
+        $count_arr = $_POST['count'];
+    	$count = intval($count_arr[$item_id]);
     	if ($count > 100) {
     		//echo "You cannot add more than 100 items at a time!";
     	} else {

@@ -95,8 +95,8 @@ EOT;
 		$colsOnAuth = "";
 		if ($loggedin) {
 			$colsOnAuth = <<<EOT
-				<td><div class="col-sm-12"><input type="text" class="form-control input-sm" name="count[$idx]" value="0"></div></td>
-				<td><input type="checkbox" name="add[$idx]" value="$id" /></td>
+				<td><div class="col-sm-12"><input type="text" class="form-control input-sm" name="count[$id]" value="1"></div></td>
+				<td><input type="checkbox" name="add[]" value="$id" /></td>
 EOT;
 		}
 
@@ -105,7 +105,7 @@ EOT;
 				<td>$id</td>
 				$name
 				$description
-				<td>\$ {$result['price']}</td>
+				<td>\${$result['price']}</td>
 				$colsOnAuth
 			</tr>
 EOT;
