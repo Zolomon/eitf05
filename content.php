@@ -24,6 +24,10 @@ if (!isset($_SESSION['site'])) {
 			include 'content/checkout.php';
 			break;
 
+		case 'receipt':
+			include 'content/receipt.php';
+			break;
+
 		default:
 			include 'content/index.php';
 			break;

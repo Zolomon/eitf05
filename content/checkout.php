@@ -1,6 +1,7 @@
 <?php
 function display_items(&$stmt, &$db, $user_id) 
 {
+	//$_SESSION['site'] = 'receipt';
 	echo <<<EOT
 	<div class='container'>
 		<div class='row'>
@@ -81,12 +82,13 @@ EOT;
 		$result = $stmt->fetch();
 
 		$email = $_SESSION['username'];
-		$firstname = $result["firstname"];
-		$surname = $result["surname"];
-		$homeaddress = $result["homeaddress"];
-		$zipcode = $result["zipcode"];
-		$city = $result["city"];
-		$country = $result["country"];
+		$firstname = $result['firstname'];
+		$surname = $result['surname'];
+		$homeaddress = $result['homeaddress'];
+		$zipcode = $result['zipcode'];
+		$city = $result['city'];
+		$country = $result['country'];
+
 		echo <<<EOT
 					<tfoot>
 						<tr>
@@ -104,69 +106,50 @@ EOT;
 				  <div class="form-group" style="max-width: 600px;">
 				    <label for="inputEmail1" class="col-lg-2 control-label">Email</label>
 				    <div class="col-lg-10">
-				      <input type="email" class="form-control" id="inputEmail1" value="$email">
+				      <input type="email" class="form-control" name="inputEmail" value="$email">
 				    </div>
 				  </div>
 				  <div class="form-group" style="max-width: 600px;">
 				    <label for="inputFirst" class="col-lg-2 control-label">First name</label>
 				    <div class="col-lg-10">
-				      <input type="text" class="form-control" id="inputFirst" value="$firstname">
+				      <input type="text" class="form-control" name="inputFirst" value="$firstname">
 				    </div>
 				  </div>
 				  <div class="form-group" style="max-width: 600px;">
 				    <label for="inputSur" class="col-lg-2 control-label">Sur name</label>
 				    <div class="col-lg-10">
-				      <input type="text" class="form-control" id="inputSur" value="$surname">
+				      <input type="text" class="form-control" name="inputSur" value="$surname">
 				    </div>
 				  </div>
 				  <div class="form-group" style="max-width: 600px;">
 				    <label for="inputStreet" class="col-lg-2 control-label">Street address</label>
 				    <div class="col-lg-10">
-				      <input type="text" class="form-control" id="inputStreet" value="$homeaddress">
+				      <input type="text" class="form-control" name="inputStreet" value="$homeaddress">
 				    </div>
 				  </div>
 				  <div class="form-group" style="max-width: 600px;">
 				    <label for="inputZip" class="col-lg-2 control-label">Zipcode</label>
 				    <div class="col-lg-10">
-				      <input type="text" class="form-control" id="inputZip" value="$zipcode">
+				      <input type="text" class="form-control" name="inputZip" value="$zipcode">
 				    </div>
 				  </div>
 				  <div class="form-group" style="max-width: 600px;">
 				    <label for="inputCity" class="col-lg-2 control-label">City</label>
 				    <div class="col-lg-10">
-				      <input type="text" class="form-control" id="inputCity" value="$city">
+				      <input type="text" class="form-control" name="inputCity" value="$city">
 				    </div>
 				  </div>
 				  <div class="form-group" style="max-width: 600px;">
 				    <label for="inputCountry" class="col-lg-2 control-label">Country</label>
 				    <div class="col-lg-10">
-				      <input type="text" class="form-control" id="inputCountry" value="$country">
+				      <input type="text" class="form-control" name="inputCountry" value="$country">
 				    </div>
 				  </div>
   				</div>
 				<div class="container"><br>
-					<p><strong><h4>Payment method</h4></strong></p>
-					<div class="radio">
-						<label>
-							<input type="radio" name="optionsRadios" id="optionsRadios1" value="card" checked>
-					    	Credit card
-						</label>
-					</div>
-					<div class="radio">
-						<label>
-					    	<input type="radio" name="optionsRadios" id="optionsRadios2" value="bill">
-					    	Bill
-					  	</label>
-					</div>
-					<div class="radio">
-						<label>
-					    	<input type="radio" name="optionsRadios" id="optionsRadios3" value="bank">
-					    	Online bank
-					  	</label>
-					</div>
 					<div class="form-group">
 						<div class="col-lg-offset-10 col-lg-10">
-							<button type="submit" class="btn-lg btn-success">Pay</button>
+							<button type="submit" class="btn-lg btn-success" name="pay">Pay</button>
 						</div>
 					</div>
 				</div>

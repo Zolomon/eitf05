@@ -7,17 +7,22 @@ $_SESSION['site'] = 'receipt';
 var_dump($_POST);
 var_dump($_SESSION);
 
-
-$user_id = $_SESSION['user'];
-/*if(isset($_POST['remove'])){ // Remove all with that id 
-	$item_id = $_POST['remove'];
-	
-	$stmt = $db->prepare("DELETE FROM cart WHERE item_id=:item_id AND user_id=:user_id;");
+if(isset($_POST['pay'])){ // Remove all with that id
+	$_SESSION['inputEmail'] = $_POST['inputEmail'];
+	$_SESSION['inputFirst'] = $_POST['inputFirst'];
+	$_SESSION['inputSur'] = $_POST['inputSur'];
+	$_SESSION['inputStreet'] = $_POST['inputStreet'];
+	$_SESSION['inputZip'] = $_POST['inputZip'];
+	$_SESSION['inputCity'] = $_POST['inputCity'];
+	$_SESSION['inputCountry'] = $_POST['inputCountry'];
+	 
+	$user_id = $_SESSION['user'];
+	$stmt = $db->prepare("DELETE FROM cart WHERE user_id=:user_id;");
 	$stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-	$stmt->bindParam(':item_id', $item_id, PDO::PARAM_INT);
 	$stmt->execute();
-	
-} else { // Update amount to the one in count column
+
+}
+ /*else { // Update amount to the one in count column
 	$before_update = $_SESSION['before_update'];
 	$update = $_POST['update'];
 	foreach ($update as $item_id => $count) {
