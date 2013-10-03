@@ -28,7 +28,7 @@ if(isset($_POST['add'])){
 
 session_write_close();
 
-//header('Location: index.php', true, 302);
-//exit();
+header('Location: index.php', true, 302);
+exit();
 
 ?>
