@@ -123,8 +123,6 @@ EOT;
 
 }
 
-
-
 if (isset($_SESSION['user'])){
 	$user_id = $_SESSION['user'];
 	if ($stmt = $db->prepare("SELECT item_id FROM cart WHERE user_id=:user_id;")){
@@ -136,7 +134,4 @@ if (isset($_SESSION['user'])){
 	echo "Error, no user available.";
 	// Error handling? Logout, reset session id?
 }
-
-
-
 ?>

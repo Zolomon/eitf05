@@ -8,13 +8,13 @@ var_dump($_POST);
 var_dump($_SESSION);
 
 if(isset($_POST['pay'])){ // Remove all with that id
-	$_SESSION['inputEmail'] = $_POST['inputEmail'];
-	$_SESSION['inputFirst'] = $_POST['inputFirst'];
-	$_SESSION['inputSur'] = $_POST['inputSur'];
-	$_SESSION['inputStreet'] = $_POST['inputStreet'];
-	$_SESSION['inputZip'] = $_POST['inputZip'];
-	$_SESSION['inputCity'] = $_POST['inputCity'];
-	$_SESSION['inputCountry'] = $_POST['inputCountry'];
+	$_SESSION['inputEmail'] = htmlspecialchars($_POST['inputEmail'];
+	$_SESSION['inputFirst'] = htmlspecialchars($_POST['inputFirst'];
+	$_SESSION['inputSur'] = htmlspecialchars($_POST['inputSur'];
+	$_SESSION['inputStreet'] = htmlspecialchars($_POST['inputStreet'];
+	$_SESSION['inputZip'] = htmlspecialchars($_POST['inputZip'];
+	$_SESSION['inputCity'] = htmlspecialchars($_POST['inputCity'];
+	$_SESSION['inputCountry'] = htmlspecialchars($_POST['inputCountry']);
 	 
 	$user_id = $_SESSION['user'];
 	$stmt = $db->prepare("DELETE FROM cart WHERE user_id=:user_id;");
