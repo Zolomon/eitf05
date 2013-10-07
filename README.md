@@ -18,8 +18,8 @@ The following files sets `$_SESSION['site']` to the name of the file, and then r
 Protection
 ====
 [X] [XSS Evasion Cheat Sheet](https://www.owasp.org/index.php/XSS_Filter_Evasion_Cheat_Sheet): Protection by escaping before outputting as HTML.  
-[X] [SQL Injections](https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet): Protection using PHP PDOs.
-[ ] [SSL](https://konklone.com/post/switch-to-https-now-for-free)
+[X] [SQL Injections](https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet): Protection using PHP PDOs.  
+[X] [SSL](https://konklone.com/post/switch-to-https-now-for-free)
 
 TODO
 ====
