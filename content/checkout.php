@@ -27,7 +27,6 @@ EOT;
 	while ($result = $stmt->fetch(PDO::FETCH_ASSOC)){
 
 			$item_id = $result['item_id'];
-			$total_items = 0;
 
 			if ($stmt2 = $db->prepare("SELECT id, name, description, price FROM items WHERE id=:item_id;")) {
 

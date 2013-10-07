@@ -8,12 +8,12 @@ var_dump($_POST);
 var_dump($_SESSION);
 
 if(isset($_POST['pay'])){ // Remove all with that id
-	$_SESSION['inputEmail'] = htmlspecialchars($_POST['inputEmail'];
-	$_SESSION['inputFirst'] = htmlspecialchars($_POST['inputFirst'];
-	$_SESSION['inputSur'] = htmlspecialchars($_POST['inputSur'];
-	$_SESSION['inputStreet'] = htmlspecialchars($_POST['inputStreet'];
-	$_SESSION['inputZip'] = htmlspecialchars($_POST['inputZip'];
-	$_SESSION['inputCity'] = htmlspecialchars($_POST['inputCity'];
+	$_SESSION['inputEmail'] = htmlspecialchars($_POST['inputEmail']);
+	$_SESSION['inputFirst'] = htmlspecialchars($_POST['inputFirst']);
+	$_SESSION['inputSur'] = htmlspecialchars($_POST['inputSur']);
+	$_SESSION['inputStreet'] = htmlspecialchars($_POST['inputStreet']);
+	$_SESSION['inputZip'] = htmlspecialchars($_POST['inputZip']);
+	$_SESSION['inputCity'] = htmlspecialchars($_POST['inputCity']);
 	$_SESSION['inputCountry'] = htmlspecialchars($_POST['inputCountry']);
 	 
 	$user_id = $_SESSION['user'];
