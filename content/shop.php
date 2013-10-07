@@ -116,11 +116,18 @@ EOT;
 
 	echo <<<EOT
 			</table>
+EOT;
+
+if ($loggedin) {
+echo <<<EOT
 			<div class="form-group">
 				<div class="col-lg-offset-10">
 					<button type="submit" class="btn-lg btn-success">Update</button>
 				</div>
 			</div>
+EOT;
+}
+echo <<<EOT
 		</form>
 	</div>
 </div>

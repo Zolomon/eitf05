@@ -18,24 +18,35 @@ function display_items(&$stmt, &$db, $user_id)
 						</tr>
 					</thead>
 EOT;
+
 	$before_update = array();
 	//$already_in_list = array();
+	$total_items = 0;
 	$total_sum = 0;
-	while ($result = $stmt->fetch(PDO::FETCH_ASSOC)){
+
+	while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+
 			$item_id = $result['item_id'];
+			$total_items = 0;
+
 			if ($stmt2 = $db->prepare("SELECT id, name, description, price FROM items WHERE id=:item_id;")) {
+
 				$stmt2->bindParam(':item_id', $item_id, PDO::PARAM_INT);
 				$stmt2->execute();
 
-				if (!array_key_exists($item_id, $before_update)){
+				if (!array_key_exists($item_id, $before_update)) {
 					//$already_in_list[$item_id] = 1;
 					$count_s = $db->prepare("SELECT COUNT(id) AS count FROM cart WHERE item_id=:item_id AND user_id=:user_id;");
 					$count_s->bindParam(':item_id', $item_id, PDO::PARAM_INT);
 					$count_s->bindParam(':user_id', $user_id, PDO::PARAM_INT);
 					$count_s->execute();
+
 					$cres = $count_s->fetch(PDO::FETCH_ASSOC);
-					$count = $cres['count'];
+
+					$count = intval(htmlspecialchars($cres['count']));
+
 					$before_update[$item_id] = $count;
+
 					while ($result = $stmt2->fetch(PDO::FETCH_ASSOC)) {
 						$name = htmlspecialchars($result['name']); // protect against XSS
 						
@@ -47,16 +58,15 @@ EOT;
 
 						$description = htmlspecialchars($result['description']);
 						
-						if(strlen($description) > 100){
+						if(strlen($description) > 100) {
 							$description = " title=\"" . $description . "\">" . substr($description, 0, 98) . "..."; // protect against XSS
 						} else {
 							$description = ">" . $description;
 						}
 
-								//<td><div class="col-sm-12"><input type="text" class="form-control input-sm" name="count_\${$result['id']}" value="1"></div></td>
-								//<td><input type="checkbox" name="count[]" value="item_\${$result['id']}" /></td>
-						$sum = $result['price'] * $count;
-						$total_sum = $total_sum + $sum;
+						// This doesn't have to be escaped since it should be update
+						$sum = floatval(htmlspecialchars($result['price'])) * $count;
+						$total_sum += $sum;
 						$sum = number_format((float)$sum, 2, '.', '');
 						echo <<<EOT
 							<tr>
@@ -70,12 +80,17 @@ EOT;
 							</tr>
 EOT;
 						//printf("<div class='col-md-4'>%s \$%s:<br><br>%s</div>", $result['name'], $result['price'], $result['description']);
+					
+						$total_items++;
 					}
 				}
 			}
 		}
+
 		$_SESSION['before_update'] = $before_update;
+		
 		$total_sum = number_format((float)$total_sum, 2, '.', '');
+
 		echo <<<EOT
 					<tfoot>
 						<tr>
@@ -91,7 +106,14 @@ EOT;
 				</table>
 				<div class="form-group">
 					<div class="col-lg-offset-10">
+EOT;
+
+if ($total_items > 0) { 
+		echo <<<EOT
 						<button type="submit" class="btn-lg btn-success">Update</button>
+EOT;
+}
+		echo <<<EOT
 					</div>
 				</div>
 			</form>
@@ -111,7 +133,8 @@ if (isset($_SESSION['user'])){
 		display_items($stmt, $db, $user_id);
 	}
 } else {
-	echo "Error, no user available";
+	echo "Error, no user available.";
+	// Error handling? Logout, reset session id?
 }
 
 
