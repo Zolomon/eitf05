@@ -84,8 +84,8 @@ EOT;
 
 		$description = htmlspecialchars($result['description']);  // protect against XSS
 		
-		if (strlen($description) > 100) {
-			$description = '<td title="' . $description . '">' . substr($description, 0, 98) . "... </td>"; 
+		if (strlen($description) > 80) {
+			$description = '<td title="' . $description . '">' . substr($description, 0, 78) . "... </td>"; 
 		} else {
 			$description = '<td>' . $description . '</td>';
 		}

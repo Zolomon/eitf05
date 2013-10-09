@@ -51,7 +51,7 @@ EOT;
 		<tr><td>{$_SESSION['inputZip']} {$_SESSION['inputCity']}</td></tr>
 		<tr><td>{$_SESSION['inputCountry']}</td></tr>
 	</table>
-	<br><p>A copy of this receipt has been sent to <strong>{$_SESSION['inputEmail']}</strong></p></br>
+	<br><p>A copy of this receipt has been sent to <strong>{$_SESSION['username']}</strong></p></br>
 EOT;
 } else {
 	echo <<<EOT
