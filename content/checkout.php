@@ -117,7 +117,7 @@ EOT;
 					<div class="form-group" style="max-width: 600px;">
 					<label for="inputEmail1" class="col-lg-2 control-label">Email</label>
 					<div class="col-lg-10">
-						<input type="email" class="form-control" name="inputEmail" value="$email">
+						<input type="email" class="form-control" name="inputEmail" value="$email" disabled>
 					</div>
 				</div>
 				<div class="form-group" style="max-width: 600px;">

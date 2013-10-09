@@ -84,8 +84,8 @@ EOT;
 
 		$description = htmlspecialchars($result['description']);  // protect against XSS
 		
-		if (strlen($description) > 100) {
-			$description = '<td title="' . $description . '">' . substr($description, 0, 98) . "... </td>"; 
+		if (strlen($description) > 80) {
+			$description = '<td title="' . $description . '">' . substr($description, 0, 78) . "... </td>"; 
 		} else {
 			$description = '<td>' . $description . '</td>';
 		}
@@ -172,7 +172,7 @@ if ($stmt = $db->prepare("SELECT id, name, description, price FROM items LIMIT :
 }
 ?>
 
-<form role="form" action="additem.php" method="post">
+<!--<form role="form" action="additem.php" method="post">
   <div class="form-group">
 	<label for="item_name" class="col-md-1 control-label">Item name:</label>
 	<div class="col-md-2">
@@ -192,4 +192,4 @@ if ($stmt = $db->prepare("SELECT id, name, description, price FROM items LIMIT :
 	</div>
   </div>
   <button type="submit" class="btn btn-default">Submit</button>
-</form>
+</form>-->

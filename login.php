@@ -35,6 +35,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
 	if($success){
 		$_SESSION["user"] = $user_id;
 		$_SESSION["username"] = $email;
+		$_SESSION['timeout'] = time();
 	}
 
 	session_write_close();
