@@ -1,11 +1,11 @@
 <?php 
 
 if (!isset($_SESSION['site'])) {
-	$_SESSION['site'] = 'index';
+	$_SESSION['site'] = 'shop';
 } else {
 	switch ($_SESSION['site']) {
 		case 'index':
-			include 'content/index.php';
+			include 'content/shop.php';
 			break;
 
 		case 'signup':
@@ -29,7 +29,7 @@ if (!isset($_SESSION['site'])) {
 			break;
 
 		default:
-			include 'content/index.php';
+			include 'content/shop.php';
 			break;
 	}
 }

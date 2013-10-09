@@ -62,7 +62,17 @@
 					</ul>
 
 					<?php 
+								/* Check if there has been any activity within the last 15 minutes, if not, logout */
+							if (isset($_SESSION['timeout'])) {
+								if ($_SESSION['timeout'] + 900 < time()) {
+									header('Location: logout.php', true, 302);
+									exit();
+								} else {
+									$_SESSION['timeout'] = time();
+								}
+							}
 							if (isset($_SESSION['loggedin']) && $_SESSION['loggedin']) {
+
 								$username = $_SESSION['username'];
 								echo <<<EOT
 					

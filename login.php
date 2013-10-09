@@ -33,6 +33,7 @@
 	if($success){
 		$_SESSION["user"] = $user_id;
 		$_SESSION["username"] = $email;
+		$_SESSION['timeout'] = time();
 	}
 
 	session_write_close();
