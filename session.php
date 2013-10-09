@@ -14,7 +14,7 @@ $session = session_start();
 // CAUTION: The script below uses REGEX to parse HTML. Heed the
 // following warning: 
 // http://stackoverflow.com/questions/1732348/regex-match-open-tags-except-xhtml-self-contained-tags/1732454#1732454
-
+// In a real site, the CSRF would be added internally by a form generating function.
 
 // Start of CSRF Guard
 // From: https://www.owasp.org/index.php/PHP_CSRF_Guard
