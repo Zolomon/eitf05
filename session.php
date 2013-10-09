@@ -5,6 +5,17 @@
 
 $session = session_start();
 
+// To protect from CSRF we can store a NONCE in a session variable,
+// add a hidden input value with this NONCE to every form and then
+// check whether this value is supplied in every POST request. If it
+// isn't, we will know that a CSRF attack has been attempted and can
+// deny the request. 
+
+// CAUTION: The script below uses REGEX to parse HTML. Heed the
+// following warning: 
+// http://stackoverflow.com/questions/1732348/regex-match-open-tags-except-xhtml-self-contained-tags/1732454#1732454
+
+
 // Start of CSRF Guard
 // From: https://www.owasp.org/index.php/PHP_CSRF_Guard
 function store_in_session($key,$value)
