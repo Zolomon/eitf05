@@ -171,3 +171,25 @@ if ($stmt = $db->prepare("SELECT id, name, description, price FROM items LIMIT :
 	echo "Database error when getting items";
 }
 ?>
+
+<!--<form role="form" action="additem.php" method="post">
+  <div class="form-group">
+	<label for="item_name" class="col-md-1 control-label">Item name:</label>
+	<div class="col-md-2">
+		<input type="text" class="form-control" id="item_name" name="item_name">
+	</div>
+  </div>
+  <div class="form-group">
+	<label for="item_desc" class="col-md-1 control-label">Item description</label>
+	<div class="col-md-2">
+		<input type="text" class="form-control" id="item_desc" name="item_desc">
+	</div>
+  </div>
+  <div class="form-group">
+	<label for="item_price" class="col-md-1 control-label">Item price:</label>
+	<div class="col-md-2">
+		<input type="text" class="form-control" id="item_price" name="item_price">
+	</div>
+  </div>
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>-->
