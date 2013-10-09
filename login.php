@@ -12,6 +12,8 @@
 	// Store in session variable that we are logged in
 	// Redirect to index.php
 
+if (isset($_POST['email']) && isset($_POST['password'])) {
+
 	$email = $_POST['email'];
 	$password = $_POST['password'];
 
@@ -36,6 +38,7 @@
 	}
 
 	session_write_close();
+}
 
 	header('Location: index.php', true, 302);
 	exit();
