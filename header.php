@@ -58,9 +58,10 @@
 							if (isset($_SESSION['loggedin']) && $_SESSION['loggedin']) { 
 								echo "<li$active_cart><a href='cart.php'>2. Cart</a></li>";
 								echo "<li$active_checkout><a href='checkout.php'>3. Checkout</a></li>";
-							}
+							} else { 
+                                echo '<li><a href="signup.php" style="padding: 10px 0 0 0 ;"><button type="submit" class="btn-sm btn-primary">Sign Up</button></a><li>';
+                            }
 					?>
-						<li><a href="signup.php" style="padding: 10px 0 0 0 ;"><button type="submit" class="btn-sm btn-primary">Sign Up</button></a><li>
 					</ul>
 
 					<?php 
