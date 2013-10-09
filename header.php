@@ -49,6 +49,8 @@
 								case 'checkout':
 									$active_checkout = " class=\"active\"";
 							}
+						}else{
+							$active_shop = " class=\"active\"";
 						}
 
 						echo "<li$active_shop><a href='shop.php'>1. Shop</a></li>";
