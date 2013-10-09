@@ -2,7 +2,7 @@
 
 if (!isset($_SESSION['site'])) {
 	$_SESSION['site'] = 'shop';
-} else {
+} 
 	switch ($_SESSION['site']) {
 		case 'index':
 			include 'content/shop.php';
@@ -32,7 +32,7 @@ if (!isset($_SESSION['site'])) {
 			include 'content/shop.php';
 			break;
 	}
-}
+
 
 ?>
 
