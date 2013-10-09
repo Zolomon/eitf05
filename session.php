@@ -124,7 +124,7 @@ function csrfguard_start()
 		if (!csrfguard_validate_token($name, $token))
 		{ 
 			trigger_error("Invalid CSRF token.",E_USER_ERROR);
-		}
+		} 
 	}
 	ob_start();
 	register_shutdown_function('csrfguard_inject');
