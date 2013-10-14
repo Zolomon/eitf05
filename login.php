@@ -35,7 +35,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
 		$hash = hash_hmac('sha512', $password . $salt, $sitewide_key);
 
 		$success = $hash === $storedHash;
-
+		session_regenerate_id();
 		$_SESSION["loggedin"] = $success;
 		if($success){
 			$_SESSION["user"] = $user_id;
